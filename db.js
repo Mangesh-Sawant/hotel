@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const mongoURI = 'mongodb://127.0.0.1:27017/hotel';
+// local url
+// const mongoURL = process.env.DB_URL_LOCAL
+const mongoURL = process.env.DB_URL;
 
 // Connect to the database
-mongoose.connect(mongoURI)
+mongoose.connect(mongoURL)
   .then(() => {
     console.log("Database is connected 🚀🚀");
   })
@@ -15,15 +18,15 @@ const db = mongoose.connection;
 
 // Event listeners for connection events
 db.on('connected', () => {
-    console.log("Mongoose default connection is open 🚀🚀");
+  console.log("Mongoose default connection is open 🚀🚀");
 });
 
 db.on('disconnected', () => {
-    console.log("Mongoose default connection is disconnected");
+  console.log("Mongoose default connection is disconnected");
 });
 
 db.on('error', (err) => {
-    console.log("Mongoose default connection has occurred an error 😩", err);
+  console.log("Mongoose default connection has occurred an error 😩", err);
 });
 
 module.exports = db;
