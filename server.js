@@ -1,15 +1,28 @@
 const express = require('express');
+const cors = require('cors'); // Import the CORS middleware
 const db = require('./db');
 require('dotenv').config(); 
 const personRoutes = require('./routes/personRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // Use environment variable for PORT
+
 const app = express();
 
-//when use send data in any format it is use to convert user data to we requied form
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+// Middleware to parse JSON bodies
+app.use(express.json()); // You can replace bodyParser.json() with express.json()
+
+// Configure CORS to allow all origins
+app.use(cors());
+
+// If you prefer to allow specific origins, use the following configuration instead:
+// const corsOptions = {
+//   origin: ['https://your-frontend-domain.com', 'http://localhost:3000'], // Replace with your frontend URLs
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization'], // Add any other headers you need
+//   credentials: true, // Enable if you need to send cookies or authentication headers
+// };
+// app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
   res.send('Welcome to your Hotel');
@@ -18,6 +31,6 @@ app.get('/', (req, res) => {
 app.use('/person', personRoutes);
 app.use('/menu', menuRoutes);
 
-app.listen(PORT,()=>{
-  console.log('listening on port 3000');
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
