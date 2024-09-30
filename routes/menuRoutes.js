@@ -45,6 +45,25 @@ router.post('/', async (req, res) => {
     }
 });
 
+
+router.put('/:id', async (req, res) => {
+    try {
+        const menuId = req.params.id;
+        const updatedMenuData = req.body;
+        const response = await Menu.findByIdAndUpdate(menuId, updatedMenuData, {
+            new: true,
+            runValidators: true //mongoose validation check data correct or not
+        });
+        if (!response) {
+            res.status(404).json({ eroor: 'Menu not Found' });
+        }
+        res.status(200).json(response);
+    } catch (err) {
+        console.log(err);
+        res.status(500, { err: 'Internal server error' });
+    }
+});
+
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params; // Get the ID from the URL parameters
