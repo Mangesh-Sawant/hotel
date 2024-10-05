@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors'); // Import the CORS middleware
 const db = require('./db');
-require('dotenv').config(); 
+const passport = require('./auth');
+require('dotenv').config();
 const personRoutes = require('./routes/personRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 
@@ -15,6 +16,10 @@ app.use(express.json()); // You can replace bodyParser.json() with express.json(
 // Configure CORS to allow all origins
 app.use(cors());
 
+//auth
+
+app.use(passport.initialize());
+
 // If you prefer to allow specific origins, use the following configuration instead:
 // const corsOptions = {
 //   origin: ['https://your-frontend-domain.com', 'http://localhost:3000'], // Replace with your frontend URLs
@@ -24,11 +29,13 @@ app.use(cors());
 // };
 // app.use(cors(corsOptions));
 
+const localAuthMiddleware = passport.authenticate('local', { session: false });
+
 app.get('/', (req, res) => {
   res.send('Welcome to your Hotel');
 });
 
-app.use('/person', personRoutes);
+app.use('/person',localAuthMiddleware, personRoutes);
 app.use('/menu', menuRoutes);
 
 app.listen(PORT, () => {
