@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to your Hotel');
 });
 
-app.use('/person', localAuthMiddleware, personRoutes);
+app.use('/person', personRoutes);
 app.use('/menu', menuRoutes);
 
 app.listen(PORT, () => {
